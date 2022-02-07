@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js"
-import { Application, TextureGCSystem } from "pixi.js";
+//import { Application, TextureGCSystem } from "pixi.js";
 
 /*const load = (app: PIXI.Application) => {
   return new Promise<void>((resolve) => {
@@ -183,7 +183,7 @@ graphicsContainer.addChild(zigzagGraphics);
 };
 
 // Cannot be an arrow function. Arrow functions cannot have a 'this' parameter.
-function update(this: any, delta: number) {
+/*function update(this: any, delta: number) {
   if (this.sprite.x <= 0 || this.sprite.x >= window.innerWidth - this.sprite.width) {
       this.velocity.x = -this.velocity.x;
   }
@@ -192,7 +192,7 @@ function update(this: any, delta: number) {
   }
   this.sprite.x += this.velocity.x * delta;
   this.sprite.y += this.velocity.y;
-};
+};*/
 
 main();
 
