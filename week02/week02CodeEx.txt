@@ -1,0 +1,2 @@
+I worked a lot with more complex logic arguments this week and is something that I am relatively proud of, shown below is a sample line of code:
+if(((j%2===0 && i%2===0)||((j+1)%2===0 && (i+1)%2===0))&&i!=1&&i!=6){
