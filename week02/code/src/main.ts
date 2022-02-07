@@ -1,13 +1,12 @@
 import * as PIXI from "pixi.js"
-import { Application, TextureGCSystem } from "pixi.js";
 
-const load = (app: PIXI.Application) => {
+/*const load = (app: PIXI.Application) => {
   return new Promise<void>((resolve) => {
       app.loader.add('assets/hello-world.png').load(() => {
           resolve();
       });
   });
-};
+};*/
 
 const main = async () => {
   // Actual app
@@ -21,7 +20,7 @@ const main = async () => {
   app.renderer.resize(window.innerWidth, window.innerHeight);
 
   // Load assets
-  await load(app);
+  //await load(app);
   /*let sprite = new PIXI.Sprite(
       app.loader.resources['assets/hello-world.png'].texture
   );
