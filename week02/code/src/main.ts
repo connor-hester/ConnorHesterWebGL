@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js"
-//import { Application, TextureGCSystem } from "pixi.js";
+import { Application, TextureGCSystem } from "pixi.js";
 
 const load = (app: PIXI.Application) => {
   return new Promise<void>((resolve) => {
