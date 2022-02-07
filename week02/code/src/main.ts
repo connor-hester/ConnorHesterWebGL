@@ -1,13 +1,13 @@
 import * as PIXI from "pixi.js"
 //import { Application, TextureGCSystem } from "pixi.js";
 
-/*const load = (app: PIXI.Application) => {
+const load = (app: PIXI.Application) => {
   return new Promise<void>((resolve) => {
       app.loader.add('assets/hello-world.png').load(() => {
           resolve();
       });
   });
-};*/
+};
 
 const main = async () => {
   // Actual app
@@ -41,9 +41,7 @@ const main = async () => {
   const circles = new PIXI.Graphics();
   const zigzagGraphics= new PIXI.Graphics();
   const graphicsContainer = new PIXI.Container();
-  const zigzagCoords=[500,150,400,550,400,100,750,200];//y Coordinate
-  const moreCoords=[450,850,1100,100,1000,500,1100,50];//x Coordinate
-  const zzScale=[1,1.2,1.15,0.95,0.65,0.7,0.8,0.85];
+  const topLayer=new PIXI.Graphics();
   
   background.beginFill(0x000000); //background
   background.drawRect(0,0,3*window.innerWidth,3*window.innerHeight);
@@ -148,10 +146,10 @@ graphicsContainer.addChild(zigzagGraphics);
 
 
 
-  graphicsContainer.addChild(circles);
+graphicsContainer.addChild(circles);
 
   const myFilter = new PIXI.filters.BlurFilter();
-  myFilter.blur=6;
+  myFilter.blur=4;
   myFilter.quality=6;
   background.filters=[myFilter];
 
@@ -160,12 +158,22 @@ graphicsContainer.addChild(zigzagGraphics);
   allFilter.saturate(0.5,true);
   
   const blurFilter =new PIXI.filters.BlurFilter();
-  blurFilter.blur=1.5;
+  blurFilter.blur=1;
   graphicsContainer.filters=[blurFilter];
 
-  //const colorFilter = new P
-
   app.stage.addChild(graphicsContainer);
+
+  for(let i=0;i<41;i++){
+    topLayer.beginFill(0x000000);
+    topLayer.drawRect(-30+87*i,0,5,window.innerHeight);
+    topLayer.endFill();
+  }
+  for(let i=0;i<30;i++){
+    topLayer.beginFill(0x000000);
+    topLayer.drawRect(0,-50+87*i,window.innerWidth,5);
+    topLayer.endFill();
+  }
+  app.stage.addChild(topLayer);
 };
 
 // Cannot be an arrow function. Arrow functions cannot have a 'this' parameter.
