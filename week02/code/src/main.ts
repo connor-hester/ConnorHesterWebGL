@@ -21,8 +21,8 @@ const main = async () => {
   app.renderer.resize(window.innerWidth, window.innerHeight);
 
   // Load assets
-  /*await load(app);
-  let sprite = new PIXI.Sprite(
+  await load(app);
+  /*let sprite = new PIXI.Sprite(
       app.loader.resources['assets/hello-world.png'].texture
   );
   sprite.x = window.innerWidth / 2 - sprite.width / 2;
