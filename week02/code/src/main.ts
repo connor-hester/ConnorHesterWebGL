@@ -177,6 +177,10 @@ graphicsContainer.addChild(zigzagGraphics);
   myFilter.quality=6;
   background.filters=[myFilter];
 
+  const allFilter = new PIXI.filters.ColorMatrixFilter();
+  graphicsContainer.filters=[allFilter];
+  allFilter.saturate(0.5,true);
+
   //const colorFilter = new P
 
   app.stage.addChild(graphicsContainer);
