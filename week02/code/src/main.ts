@@ -77,13 +77,14 @@ for(let i=0;i<8;i++){
   const x=window.innerWidth/8;
   const y=window.innerHeight/6;
   for(let j=0; j<6;j++){
-    if(((j%2===0 && i%2===0)||((j+1)%2===0 && (i+1)%2===0))&&i!=1&&i!=6){
+    if(((j%2===0 && i%2===0)||((j+1)%2===0 && (i+1)%2===0))){
       const z=(Math.random()*80)+30;
+      const a=(Math.random()*160)-80;
       squares.beginFill(0x82100F);//square shadow
-      squares.drawRect(i*x,j*y,z,z);
+      squares.drawRect(i*x+a,j*y,z,z);
       squares.endFill();
       squares.beginFill(0xF54E2B);//square
-      squares.drawRect(i*x+5,j*y-5,z,z);
+      squares.drawRect(i*x+5+a,j*y-5,z,z);
       squares.endFill();
     }
   }
@@ -93,82 +94,59 @@ for(let i=0;i<=8;i++){
   const x=window.innerWidth/10;
   const y=window.innerHeight/8;
   for(let j=0; j<=12;j++){
-    if((i%2==0 && j%2==0 && j!==i && j+i<15 && (j+i)!==10)){
+    if((i%2==0 && j%2==0 && j!==i)){
       const z=(Math.random()*20)+20;
+      const a=(Math.random()*160)+80;
       circles.lineStyle(z,0x114B66,1);
       circles.beginFill(0x000000,0);
-      circles.drawCircle(i*x+50,j*y+50-6*z,z);
+      circles.drawCircle(i*x+50+a,j*y+50,z);
       circles.endFill();
       circles.lineStyle(z,0x59D5D8,1);
       circles.beginFill(0x000000,0);
-      circles.drawCircle(i*x+55,j*y+45-6*z,z);
+      circles.drawCircle(i*x+55+a,j*y+45,z);
       circles.endFill();
     }
   }
 }
- circles.scale.y=0.8;
- circles.scale.x=0.8;
- circles.y=50;
- circles.x=250;
- circles.angle=15;
+ //circles.y=250;
+ circles.x=-200;
+ //circles.angle=-45;
 
 for(let i=0;i<=12;i++){
   const x=window.innerWidth/10;
   const y=window.innerHeight/6;
   for(let j=0; j<=12;j++){
-    if(j%4===0 && i%3===0 && (j+i)!==10 && (j+i)!==16){
-      const z=(Math.random()*100)-50;
+    if(j%4===0 && i%4===0){
+      const z=(Math.random()*160)-80;
+      const a=(Math.random()*160)-80;
       zigzagGraphics.beginFill(0x9E8800);//yellow zigzag shadow
-      zigzagGraphics.drawRect(x*i-10+z,y*j+10,40,100);
-      zigzagGraphics.drawRect(x*i-10+z,y*j+10,100,40);
-      zigzagGraphics.drawRect(x*i+50+z,y*j-50,40,100);
-      zigzagGraphics.drawRect(x*i+50+z,y*j-50,100,40);
-      zigzagGraphics.drawRect(x*i+110+z,y*j-110,40,100);
+      zigzagGraphics.drawRect(x*i-10+3*z,y*j+10+2*a,40,100);
+      zigzagGraphics.drawRect(x*i-10+3*z,y*j+10+2*a,100,40);
+      zigzagGraphics.drawRect(x*i+50+3*z,y*j-50+2*a,40,100);
+      zigzagGraphics.drawRect(x*i+50+3*z,y*j-50+2*a,100,40);
+      zigzagGraphics.drawRect(x*i+110+3*z,y*j-110+2*a,40,100);
       zigzagGraphics.endFill();
 
       zigzagGraphics.beginFill(0xDCD917);//yellow zigzag
-      zigzagGraphics.drawRect(x*i+z,y*j,40,100);
-      zigzagGraphics.drawRect(x*i+z,y*j,100,40);
-      zigzagGraphics.drawRect(x*i+z+60,y*j-60,40,100);
-      zigzagGraphics.drawRect(x*i+z+60,y*j-60,100,40);
-      zigzagGraphics.drawRect(x*i+z+120,y*j-129,40,100);
+      zigzagGraphics.drawRect(x*i+3*z,y*j+2*a,40,100);
+      zigzagGraphics.drawRect(x*i+3*z,y*j+2*a,100,40);
+      zigzagGraphics.drawRect(x*i+3*z+60,y*j+2*a-60,40,100);
+      zigzagGraphics.drawRect(x*i+3*z+60,y*j+2*a-60,100,40);
+      zigzagGraphics.drawRect(x*i+3*z+120,y*j+2*a-129,40,100);
       zigzagGraphics.endFill();
     }
   }
-  zigzagGraphics.angle=15;
+  //zigzagGraphics.angle=15;
   zigzagGraphics.scale.x=0.6;
   zigzagGraphics.scale.y=0.6;
 }
 
-zigzagGraphics.x=230;
+zigzagGraphics.x=60;
 zigzagGraphics.y=-160;
 graphicsContainer.addChild(squares);
 graphicsContainer.addChild(zigzagGraphics);
 
-/*zigzagCoords.forEach(function(yPos,index){//zigzag function
-  const zigzagGraphics= new PIXI.Graphics();
-   
-  zigzagGraphics.beginFill(0x9E8800);//yellow zigzag shadow
-  zigzagGraphics.drawRect(moreCoords[index]-10,yPos+10,40,100);
-  zigzagGraphics.drawRect(moreCoords[index]-10,yPos+10,100,40);
-  zigzagGraphics.drawRect(moreCoords[index]+50,yPos-50,40,90);
-  zigzagGraphics.drawRect(moreCoords[index]+50,yPos-50,100,40);
-  zigzagGraphics.drawRect(moreCoords[index]+110,yPos-110,40,90);
-  zigzagGraphics.endFill();
 
-  zigzagGraphics.beginFill(0xDCD917);//yellow zigzag
-  zigzagGraphics.drawRect(moreCoords[index],yPos,40,100);
-  zigzagGraphics.drawRect(moreCoords[index],yPos,100,40);
-  zigzagGraphics.drawRect(moreCoords[index]+60,yPos-60,40,100);
-  zigzagGraphics.drawRect(moreCoords[index]+60,yPos-60,100,40);
-  zigzagGraphics.drawRect(moreCoords[index]+120,yPos-129,40,100);
-  zigzagGraphics.endFill();
-
-  zigzagGraphics.scale.x=zzScale[index];
-  zigzagGraphics.scale.y=zzScale[index];
-
-  graphicsContainer.addChild(zigzagGraphics);
-  })*/
 
   graphicsContainer.addChild(circles);
 
@@ -180,6 +158,10 @@ graphicsContainer.addChild(zigzagGraphics);
   const allFilter = new PIXI.filters.ColorMatrixFilter();
   graphicsContainer.filters=[allFilter];
   allFilter.saturate(0.5,true);
+  
+  const blurFilter =new PIXI.filters.BlurFilter();
+  blurFilter.blur=1.5;
+  graphicsContainer.filters=[blurFilter];
 
   //const colorFilter = new P
 
