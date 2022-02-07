@@ -1,0 +1,38 @@
+h1{
+    background-color: black;
+    font-family:monospace;
+    color:rgb(255, 255, 255);
+    text-align:center;
+    border: 1px solid white;
+    margin:0px;
+}
+body{
+    background-color:black;
+}
+h3{
+    background-color: rgb(255, 255, 255);
+    text-align:center;
+    font-family:monospace;
+    color:white;
+}
+p{
+    text-align: center;
+    margin: 80px;
+}
+h6{
+    text-align:right;
+    font-family:monospace;
+    color:white;
+    font-size:10px;
+    margin:0px 0px;
+}
+.container{
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
+}
+@media only screen and (max-width: 1000px) {
+    body {
+      background-color: #e4e4f4;
+    }
+  }
