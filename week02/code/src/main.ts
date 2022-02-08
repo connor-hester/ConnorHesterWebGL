@@ -1,12 +1,7 @@
 import * as PIXI from "pixi.js"
 
-/*const load = (app: PIXI.Application) => {
-  return new Promise<void>((resolve) => {
-      app.loader.add('assets/hello-world.png').load(() => {
-          resolve();
-      });
-  });
-};*/
+const load = (app: PIXI.Application) => {
+};
 
 const main = async () => {
   // Actual app
