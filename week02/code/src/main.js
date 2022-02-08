@@ -38,9 +38,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var PIXI = require("pixi.js");
 var load = function (app) {
-    return new Promise(function (resolve) {
-        resolve();
-    });
 };
 var main = function () { return __awaiter(void 0, void 0, void 0, function () {
     var app, background, squares, circles, zigzagGraphics, graphicsContainer, topLayer, i, j, i, j, i, x, y, j, z, a, i, x, y, j, z, a, i, x, y, j, z, a, myFilter, allFilter, blurFilter, i, i;
