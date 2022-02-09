@@ -1,9 +1,12 @@
 import * as PIXI from "pixi.js"
 
-const load = (app: PIXI.Application) => {
-};
+/*const load = (app: PIXI.Application) => {
+  return new Promise<void>((resolve) => {
+      resolve();
+  });
+};*/
 
-const main = async () => {
+function main(){
   // Actual app
   let app = new PIXI.Application();
   // Display application properly
@@ -170,17 +173,5 @@ graphicsContainer.addChild(circles);
   app.stage.addChild(topLayer);
 };
 
-// Cannot be an arrow function. Arrow functions cannot have a 'this' parameter.
-/*function update(this: any, delta: number) {
-  if (this.sprite.x <= 0 || this.sprite.x >= window.innerWidth - this.sprite.width) {
-      this.velocity.x = -this.velocity.x;
-  }
-  if (this.sprite.y <= 0 || this.sprite.y >= window.innerHeight - this.sprite.height) {
-      this.velocity.y = -this.velocity.y;
-  }
-  this.sprite.x += this.velocity.x * delta;
-  this.sprite.y += this.velocity.y;
-};*/
-
-main();
+//main();
 
