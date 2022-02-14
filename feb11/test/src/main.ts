@@ -1,13 +1,5 @@
 import * as PIXI from 'pixi.js'
-import * as dat from 'dat.gui'
-import { Model, SceneState } from './model'
-import { Scene } from './scene'
-import { SceneOne } from './sceneOne';
-import { SceneTwo } from './sceneTwo';
 
-let mModel = new Model();
-let sceneOne: SceneOne = new SceneOne(mModel);
-let sceneTwo: SceneTwo = new SceneTwo(mModel);
 
 let graphics: PIXI.Graphics;
 
@@ -42,9 +34,7 @@ const main = async () => {
 
     // app.stage.addChild(sprite);
     // let cont = new PIXI.Container();
-    app.stage.addChild(sceneOne.container);
-    app.stage.addChild(sceneTwo.container);
-
+    
     // Handle window resizing
     window.addEventListener('resize', (_e) => {
         app.renderer.resize(window.innerWidth, window.innerHeight);
@@ -55,14 +45,14 @@ const main = async () => {
     document.body.appendChild(app.view);
 
 
-    const gui = new dat.GUI()
+   /* const gui = new dat.GUI()
     gui.add(mModel.getInstance().buttonData, 'width', 0, 200)
     gui.add(mModel.getInstance().buttonData, 'height', 0, 200)
     gui.addColor(mModel.getInstance().buttonData, 'firstColor')
-    gui.addColor(mModel.getInstance().buttonData, 'secondColor')
+    gui.addColor(mModel.getInstance().buttonData, 'secondColor')*/
 
 
-    app.ticker.add(update);
+    //app.ticker.add(update);
 
     const background = new PIXI.Graphics();
   const squares = new PIXI.Graphics();
@@ -205,7 +195,7 @@ graphicsContainer.addChild(circles);
 };
 
 // Cannot be an arrow function. Arrow functions cannot have a 'this' parameter.
-function update(delta: number) {
+/*function update(delta: number) {
 
     switch (mModel.sceneState) {
         case SceneState.first:
@@ -223,7 +213,7 @@ function update(delta: number) {
         default:
             break;
     }
-};
+};*/
 
 main();
 
