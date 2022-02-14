@@ -11,15 +11,16 @@ let sceneOne: SceneOne = new SceneOne(mModel);
 let sceneTwo: SceneTwo = new SceneTwo(mModel);*/
 
 
-const load = (app: PIXI.Application) => {
+/*const load = (app: PIXI.Application) => {
     return new Promise<void>((resolve) => {
         app.loader.add('assets/hello-world.png').load(() => {
             resolve();
         });
     });
-};
+};*/
 
-const main = async () => {
+//const main = async () => {
+    function main(){
     // Actual app
     let app = new PIXI.Application({antialias: true, backgroundColor: 0x111111});
 
@@ -32,7 +33,7 @@ const main = async () => {
     app.renderer.resize(window.innerWidth, window.innerHeight);
 
     // Load assets
-    await load(app);
+    //await load(app);
 
     let graphics = new PIXI.Container();
     let circles = new PIXI.Graphics();
@@ -164,6 +165,7 @@ function updateTime(){
     let mins = date.getMinutes();
     return([hrs,mins]);
 }
+main();
 /*function update(delta: number) {
 
     switch (mModel.sceneState) {
