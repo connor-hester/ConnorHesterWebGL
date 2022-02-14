@@ -1,12 +1,31 @@
-# pixi-ts-quickstart
-
-This repo can be used as a minimal springboard for developing a pixijs app. The main.ts file has all the boilerplate code needed to get started.
-
-## dependencies
-the package.json comes pre-installed with pixi, typescript, and a few other helpful libraries
-
-
-## usage
-- cd into the repo, and run `npm i` to fetch all the dependencies.
-- edit the source typescript file(s) in the `src` folder and run `npm run dev` in the terminal to launch the vite server
-- in a separate terminal, you can also run `npm run watch` to run the typescript compiler in watch mode
+below was the code that i used to determine how to format the circles that were representative of minutes
+if(minutes>=10){
+    tens=Math.floor(minutes/10);
+    ones=minutes%10;
+    for(let i=0; i<ones; i++){
+        if(i<5){
+            circles.drawCircle(3*window.innerWidth/4+40,3*window.innerHeight/4-60*i,30);
+        }
+        if(i>=5 && i<9){
+            circles.drawCircle(3*window.innerWidth/4+100,3*window.innerHeight/4-60*(i-5),30)
+        }
+    }
+    for(let i=0; i<tens; i++){
+        if(i<5){
+            circles.drawCircle(3*window.innerWidth/4-210,3*window.innerHeight/4-70*i-5,35);
+        }
+        if(i>=5 && i<9){
+            circles.drawCircle(3*window.innerWidth/4-150,3*window.innerHeight/4-70*(i-5)-5,35)
+        }
+    }
+}
+else{
+    for (let i=0;i<minutes;i++){
+        if(i<5){
+            circles.drawCircle(3*window.innerWidth/4+90,3*window.innerHeight/4-60*i,30);
+        }
+        if(i>=5 && i<9){
+            circles.drawCircle(3*window.innerWidth/4+150,3*window.innerHeight/4-60*(i-5),30)
+        }
+    }
+}
