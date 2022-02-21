@@ -91,7 +91,6 @@ const main = async () => {
     master.add(second());
     master.add(third());
     master.add(fourth());
-    //master.timescale(2);
     master.play();
     tl.play();
 };
