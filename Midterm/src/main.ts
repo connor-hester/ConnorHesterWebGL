@@ -26,22 +26,20 @@ const load = (app: PIXI.Application) => {
 
 const main = async () => {
   
-    const data = null; 
-
-    const xhr = new XMLHttpRequest();
-    xhr.withCredentials = true;
-    
-    xhr.addEventListener("readystatechange", function () {
-        if (this.readyState === this.DONE) {
-            console.log(this.responseText);
+    const settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://community-open-weather-map.p.rapidapi.com/weather?q=New%20york%20city&lat=0&lon=0&callback=test&id=2172797&lang=null&units=imperial&mode=JSON",
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "community-open-weather-map.p.rapidapi.com",
+            "x-rapidapi-key": "8f9ac0a3ecmshb4c31864ba3f288p186f7fjsnf3588e26a837"
         }
+    };
+    
+    $.ajax(settings).done(function (response) {
+        console.log(response);
     });
-    
-    xhr.open("GET", "https://community-open-weather-map.p.rapidapi.com/weather?q=New%20york%20city&lat=0&lon=0&callback=test&id=2172797&lang=null&units=imperial&mode=JSON");
-    xhr.setRequestHeader("x-rapidapi-host", "community-open-weather-map.p.rapidapi.com");
-    xhr.setRequestHeader("x-rapidapi-key", "8f9ac0a3ecmshb4c31864ba3f288p186f7fjsnf3588e26a837");
-    
-    xhr.send(data);
       
 //     request.open('GET', url, true)
 //     request.onload = function () {
