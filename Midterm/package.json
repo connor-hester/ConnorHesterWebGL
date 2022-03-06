@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "axios": "^0.26.0",
+    "cors-anywhere": "^0.4.4",
     "pixi-filters": "^4.1.6"
   }
 }
