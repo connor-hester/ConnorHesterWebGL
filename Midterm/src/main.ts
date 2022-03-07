@@ -155,6 +155,11 @@ const main = async () => {
         fill:0x1C3B4B,
         fontSize:12
     });
+    let style3=new PIXI.TextStyle({
+        fill:0x1C3B4B,
+        fontSize:24,
+        align:'center'
+    });
     let myText=new PIXI.Text("High Temp (˚F)",style1);
     textContainer.addChild(myText);
     myText=new PIXI.Text("Low Temp (˚F)",style1);
@@ -171,6 +176,8 @@ const main = async () => {
     textContainer.addChild(myText);
     myText=new PIXI.Text("50",style2);
     textContainer.addChild(myText);
+    myText=new PIXI.Text("Animated Weather Station\nConnor Hester S22",style3);
+    textContainer.addChild(myText);
     textContainer.getChildAt(0).setTransform(frameW/2,h/2-1.25*frameH,1,1,3*Math.PI/2,0,0,0,0);
     textContainer.getChildAt(1).setTransform(w/4-frameW/2,frameH/4,1,1,0,0,0,0,0);
     textContainer.getChildAt(2).setTransform(frameW/2,3*h/4+2.65*frameH,1,1,3*Math.PI/2,0,0,0,0);
@@ -179,6 +186,7 @@ const main = async () => {
     textContainer.getChildAt(5).setTransform(1.1*frameW,5*h/6-2.1*frameH,1,1,0,0,0,0,0);
     textContainer.getChildAt(6).setTransform(w/2+2.85*frameW,h/2-4*frameH,1,1,0,0,0,0,0);
     textContainer.getChildAt(7).setTransform(5*w/6+2.25*frameW,h/2+frameH/4,1,1,0,0,0,0,0);
+    textContainer.getChildAt(8).setTransform(3*w/4-4.25*frameW,3*h/4+frameH/2,1,1,0,0,0,0,0);
     app.stage.addChild(textContainer);
     // Handle window resizing
     window.addEventListener('resize', (_e) => {
