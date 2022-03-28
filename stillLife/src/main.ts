@@ -15,6 +15,7 @@ let lightPoint: THREE.PointLight;
 
 let controls: OrbitControls;
 let stats: any;
+let rotSpd:number;
 
 let cube: THREE.Mesh;
 let cube1: THREE.Mesh;
@@ -23,6 +24,14 @@ let cube3: THREE.Mesh;
 let cube4: THREE.Mesh;
 let cube5: THREE.Mesh;
 let cube6: THREE.Mesh;
+let cube7: THREE.Mesh;
+let cube8: THREE.Mesh;
+let cube9: THREE.Mesh;
+let cube10: THREE.Mesh;
+let cube11: THREE.Mesh;
+let cube12: THREE.Mesh;
+let cube13: THREE.Mesh;
+let cube14: THREE.Mesh;
 let plane: THREE.Mesh;
 let group: THREE.Group;
 let exampleModel: THREE.Group;
@@ -46,7 +55,7 @@ function initStats() {
 function initScene() {
     scene = new THREE.Scene();
 
-    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
     //camera.rotation.y=30;
     camera.position.z = 6;
 
@@ -61,11 +70,8 @@ function initScene() {
 
     controls = new OrbitControls(camera, renderer.domElement);
 
-    lightAmbient = new THREE.AmbientLight(0xFFFFFF);
-    scene.add(lightAmbient);
-
-	// lightAmbient = new THREE.AmbientLight(0xffffff);
-	// scene.add(lightAmbient);
+    const hemiLight = new THREE.HemisphereLight( 0x9800FF,0xFF0000, 2.5 );
+    scene.add( hemiLight );
 
     // Add a point light to add shadows
     // https://github.com/mrdoob/three.js/pull/14087#issuecomment-431003830
@@ -81,17 +87,6 @@ function initScene() {
     lightPoint.castShadow = true;
     lightPoint.intensity = 8;
     scene.add(lightPoint);
-
-	lightPoint = new THREE.PointLight(0xffffff)
-	lightPoint.position.set(-0.5, 0.5, 4)
-	lightPoint.castShadow = true;
-	lightPoint.intensity = shadowIntensity;
-	scene.add(lightPoint)
-
-    const lightPoint2 = lightPoint.clone();
-    lightPoint2.intensity = 1 - shadowIntensity;
-    lightPoint2.castShadow = false;
-    scene.add(lightPoint2);
 
     const spotlight=new THREE.SpotLight(0xFFFFFF,1);
     spotlight.position.set(0,4,3);
@@ -118,34 +113,74 @@ function initScene() {
     scene.add(cube);
 
      cube1=new THREE.Mesh(geometryBox,materialBox);
-    cube1.position.set(4,5,-3);
+    cube1.position.set(6,2,-3);
     cube1.rotation.set(0.9,0,0);
     scene.add(cube1);
 
      cube2=new THREE.Mesh(geometryBox,materialBox);
-    cube2.position.set(4,5,-3);
+    cube2.position.set(6,2,-3);
     cube2.rotation.set(0,0.9,0);
     scene.add(cube2);
 
      cube3=new THREE.Mesh(geometryBox,materialBox);
-    cube3.position.set(-6,1,-2);
+    cube3.position.set(-6,2,-3);
     cube3.rotation.set(0.9,0,0);
     scene.add(cube3);
 
      cube4=new THREE.Mesh(geometryBox,materialBox);
-    cube4.position.set(-6,1,-2);
+    cube4.position.set(-6,2,-3);
     cube4.rotation.set(0,0.9,0);
     scene.add(cube4);
 
     cube5=new THREE.Mesh(geometryBox,materialBox);
-    cube5.position.set(5,-1,-1);
+    cube5.position.set(4,4,-2);
     cube5.rotation.set(0.9,0,0);
     scene.add(cube5);
 
      cube6=new THREE.Mesh(geometryBox,materialBox);
-    cube6.position.set(5,-1,-1);
+    cube6.position.set(4,4,-2);
     cube6.rotation.set(0,0.9,0);
     scene.add(cube6);
+
+    cube7=new THREE.Mesh(geometryBox,materialBox);
+    cube7.position.set(-4,4,-2);
+    cube7.rotation.set(0.9,0,0);
+    scene.add(cube7);
+
+    cube8=new THREE.Mesh(geometryBox,materialBox);
+    cube8.position.set(-4,4,-2);
+    cube8.rotation.set(0,0.9,0);
+    scene.add(cube8);
+
+    cube9=new THREE.Mesh(geometryBox,materialBox);
+    cube9.position.set(0,5,-1);
+    cube9.rotation.set(0.9,0,0);
+    scene.add(cube9);
+
+    cube10=new THREE.Mesh(geometryBox,materialBox);
+    cube10.position.set(0,5,-1);
+    cube10.rotation.set(0,0.9,0);
+    scene.add(cube10);
+
+    cube11=new THREE.Mesh(geometryBox,materialBox);
+    cube11.position.set(-7,-1,-4);
+    cube11.rotation.set(0.9,0,0);
+    scene.add(cube11);
+
+    cube12=new THREE.Mesh(geometryBox,materialBox);
+    cube12.position.set(-7,-1,-4);
+    cube12.rotation.set(0,0.9,0);
+    scene.add(cube12);
+
+    cube13=new THREE.Mesh(geometryBox,materialBox);
+    cube13.position.set(7,-1,-4);
+    cube13.rotation.set(0.9,0,0);
+    scene.add(cube13);
+
+    cube14=new THREE.Mesh(geometryBox,materialBox);
+    cube14.position.set(7,-1,-4);
+    cube14.rotation.set(0,0.9,0);
+    scene.add(cube14);
 	// const cubeGeometry = new THREE.BoxGeometry()
 	// const cubeMaterial = new THREE.MeshPhongMaterial({color: 0xf0bbbb})
 	// // cubeMaterial.wireframe = true;
@@ -274,17 +309,25 @@ function animate() {
     });
 
     let delta = clock.getDelta();
-    
+    rotSpd=0.03;
     // shaderMat.uniforms.u_time.value += delta;
 
     // cube.rotation.x += 0.01;
     // cube.rotation.y += 0.01;
-    cube1.rotation.x+=0.01;
-    cube2.rotation.y+=0.01;
-    cube3.rotation.x-=0.01;
-    cube4.rotation.y-=0.01;
-    cube5.rotation.x+=0.01;
-    cube6.rotation.y-=0.01;
+    cube1.rotation.x+=rotSpd;
+    cube2.rotation.y+=rotSpd;
+    cube3.rotation.x-=rotSpd;
+    cube4.rotation.y-=rotSpd;
+    cube5.rotation.x-=rotSpd;
+    cube6.rotation.y-=rotSpd;
+    cube7.rotation.x+=rotSpd;
+    cube8.rotation.y+=rotSpd;
+    cube9.rotation.z+=rotSpd;
+    cube10.rotation.x+=rotSpd;
+    cube11.rotation.x+=rotSpd;
+    cube12.rotation.y+=rotSpd;
+    cube13.rotation.x-=rotSpd;
+    cube14.rotation.y-=rotSpd;
 
 
 	//group.rotateZ(delta)
