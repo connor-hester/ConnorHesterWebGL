@@ -13,15 +13,18 @@ let clock = new THREE.Clock();
 
 let lightAmbient: THREE.AmbientLight;
 let lightPoint: THREE.PointLight;
+let spotlight:THREE.SpotLight;
 
 let controls: OrbitControls;
 let stats: any;
 
 let cube: THREE.Mesh;
 let plane: THREE.Mesh;
+let plane2:THREE.Mesh;
 let group: THREE.Group;
 let exampleModel: THREE.Group;
 let cannonModel:THREE.Group;
+let holyTooth:THREE.Group;
 let toothModel:THREE.Group;
 let exampleTexture: THREE.Texture;
 const axis=new THREE.Vector3(0,0,1);
@@ -70,28 +73,43 @@ function initScene() {
 	// https://github.com/mrdoob/three.js/pull/14087#issuecomment-431003830
 	const shadowIntensity = 1;
 
+	lightPoint = new THREE.PointLight(0xffFFFF);
+	lightPoint.position.set(-0, 9, -25);
+	//lightPoint.castShadow = true;
+	lightPoint.intensity = 1;
+	scene.add(lightPoint);
+
 	lightPoint = new THREE.PointLight(0xff0000);
-	lightPoint.position.set(-2, 1.5, 3);
+	lightPoint.position.set(-7, 1.5, 3);
 	//lightPoint.castShadow = true;
 	lightPoint.intensity = shadowIntensity+0.2;
 	scene.add(lightPoint);
 
 	lightPoint = new THREE.PointLight(0x0000FF);
-	lightPoint.position.set(2, 1.5, 3);
+	lightPoint.position.set(7, 1.5, 3);
 	//lightPoint.castShadow = true;
 	lightPoint.intensity = shadowIntensity+0.2;
 	scene.add(lightPoint);
 
 	lightPoint = new THREE.PointLight(0x00FF00);
-	lightPoint.position.set(0, -3, 3);
+	lightPoint.position.set(0, -5, 3);
 	//lightPoint.castShadow = true;
 	lightPoint.intensity = shadowIntensity;
 	scene.add(lightPoint);
 
-	const spotlight=new THREE.SpotLight(0xFFFFFF,1,0,Math.PI/16);
-	spotlight.position.set(-25,0,0);
+	spotlight=new THREE.SpotLight(0xFFFFFF,2,0,Math.PI/32);
+	spotlight.position.set(-25,3.5,0);
 	spotlight.castShadow=true;
 	scene.add(spotlight);
+
+	// spotlight=new THREE.SpotLight(0xFFB500,1,0,Math.PI/16);
+	// spotlight.position.set(0,15,-30);
+	// spotlight.target.position.x=0;
+	// spotlight.target.position.y=10;
+	// spotlight.target.position.z=-17;
+	// spotlight.castShadow=true;
+	// scene.add(spotlight);
+	
 	const mapSize = 1024; // Default 512
 	const cameraNear = 0.5; // Default 0.5
 	const cameraFar = 500; // Default 500
@@ -125,6 +143,17 @@ function initScene() {
 		cannonModel.position.z=0;
 		cannonModel.castShadow=true;
 		scene.add(cannonModel);
+	});
+	gltfLoader.load('toothWColor.gltf', (gltf) => {
+		holyTooth = gltf.scene;
+		//console.log(exampleModel)
+
+		holyTooth.scale.set(2.5,2.5,2.5);
+		holyTooth.position.x = 0;
+		holyTooth.position.y=2;
+		holyTooth.position.z=-17;
+		holyTooth.castShadow=true;
+		scene.add(holyTooth);
 	});
 
 scene.add(group)
@@ -188,10 +217,16 @@ scene.add(group)
 	});
 
 	plane = new THREE.Mesh(geometryPlane, materialPlane);
-	plane.position.z = -3;
+	plane.position.z = 0;
+	plane.position.y=-2;
 	plane.receiveShadow = true;
+	plane.rotateX(Math.PI/2);
 	scene.add(plane);
 
+	// plane2 = new THREE.Mesh(geometryPlane, materialPlane);
+	// plane2.position.z = -1.5;
+	// plane2.receiveShadow = true;
+	// scene.add(plane2);
 	// add event listener to highlight dragged objects
 
 	controls.addEventListener('dragstart', function (event) {
@@ -207,7 +242,7 @@ scene.add(group)
 			// toothArray[0].material.dispose();
 			//  toothArray[0].geometry.dispose();
 			const loader = new GLTFLoader().setPath('../resources/models/');
-			loader.load('tooth.gltf', (gltf) => {
+			loader.load('toothWColor.gltf', (gltf) => {
 				toothModel = gltf.scene;
 				//console.log(exampleModel)
 				toothModel.scale.set(0.12,0.12,0.12);
@@ -286,15 +321,16 @@ function animate() {
 	}
 	if(toothModel!=undefined){
 		toothModel.position.x+=0.07;
+		toothModel.rotateOnAxis(axis,-0.095);
 		//toothModel.rotation.setFromQuaternion(quaternion);
 	}
-	if(toothModel!=undefined){
-		toothModel.rotateOnAxis(axis,-0.095);
+	if(holyTooth!=undefined){
+		holyTooth.rotateY(0.02);
 	}
 	
 	const vertArray = plane.geometry.attributes.position;
 	for (let i = 0; i < vertArray.count; i++) {
-		vertArray.setZ(i, Math.sin(clock.getElapsedTime() + i - vertArray.count / 2) * 0.4);
+		vertArray.setZ(i, Math.sin(clock.getElapsedTime() + i - vertArray.count / 2) * 0.6);
 	}
 	plane.geometry.attributes.position.needsUpdate = true;
 
