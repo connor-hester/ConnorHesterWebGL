@@ -189,21 +189,7 @@ function initScene() {
 
 
 	group = new THREE.Group()
-	//group.add(cube)
-
-	// cube.position.set(-2, 0, 0)
-
-
-    // const gltfLoader = new GLTFLoader();
-    // const url = 'resources/models/stillLife.gtlf';
-    // gltfLoader.load(url, (gltf) => {
-    //   const root = gltf.scene;
-    // //   root.scale.set(0.5,0.5,0.5);
-    //    root.position.x=0;
-    //    root.position.y=0;
-    //    root.position.z=0;
-    //   group.add(root);
-    // });
+	
     const gltfLoader = new GLTFLoader().setPath('../resources/models/');
 		gltfLoader.load('flower.gltf', (gltf) => {
 			exampleModel = gltf.scene;

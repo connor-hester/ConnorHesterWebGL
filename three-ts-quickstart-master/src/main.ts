@@ -1,5 +1,5 @@
 import './style.scss';
-import * as THREE from 'three'; 1
+import * as THREE from 'three'; 
 import Stats from 'three/examples/jsm/libs/stats.module';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
