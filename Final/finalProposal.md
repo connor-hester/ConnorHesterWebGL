@@ -13,4 +13,4 @@ It will be a challenge to determine the best physical interface for movement and
 I think creating the physical interface will be the first thing I tackle because I am still the least familiar with Arduino and physical computing. Next I will design my characters using 3D modeling software, Maya. Then I will create the platforms and setting for the game. Then I will start to design the player mechanics as well as create the bullets that the characters fire. After that I will add polish and juice effects to make the overall presentation more appealing. 
 Week 1: Physical inteface design + begin 3D models 
 Week 2: Finish 3D Models + Create setting/background elements in three.js + Create score system/display
-Week 3: Import models and design player mechanics + connect physical interface to electron + add polish and juice
+Week 3: Import models and design player mechanics + connect physical interface to electron + add polish and juice effects
