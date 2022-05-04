@@ -3,15 +3,12 @@ import * as THREE from 'three';
 import { ExtrudeGeometry, Group, Object3D, Raycaster, ShaderMaterial, Shading, Vector2 } from 'three';
 import Stats from 'three/examples/jsm/libs/stats.module';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-//import { DragControls } from 'three/examples/jsm/controls/DragControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as DAT from 'dat.gui';
 import * as CANNON from 'cannon-es'
-
 // import { baseView } from '../views/baseView';
 // import { baseViewExtend } from '../views/baseViewExtend';
 //import { viewOne } from '../views/viewOne';
-
 import cactusPath from './assets/models/cactus.gltf';
 import spikePath from './assets/models/cactusSpike.gltf';
 import barrelPath from './assets/models/barrel.gltf';
@@ -19,12 +16,8 @@ import sandPath from './assets/textures/desertSand.jpg';
 import woodPath from './assets/textures/woodTexture.png';
 import smallBlockPath from './assets/textures/smallBlockTexture.png';
 import westernFontPath from './assets/RioGrande.json';
-
-
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
-import TextureLoader from './TextureLoader';
-
 
 let model = {
 	groupX: 0,
@@ -40,16 +33,16 @@ let clock = new THREE.Clock();
 let stats: any;
 let raycaster: THREE.Raycaster;
 let pointerPosition: THREE.Vector2;
-//let viewOne: ViewOne;
 let shaderMat: ShaderMaterial;
 let controls: OrbitControls;
+let lightPoint:THREE.PointLight;
 
-let balloon: THREE.Mesh;
 let cactus: THREE.Group;
-let spike: THREE.Mesh;
 let barrel0: THREE.Group;
 let barrel1: THREE.Group;
-let lightPoint:THREE.PointLight;
+
+let spike: THREE.Mesh;
+let balloon: THREE.Mesh;
 let floor:THREE.Mesh;
 let back:THREE.Mesh;
 let smallBlock0:THREE.Mesh;
@@ -66,49 +59,36 @@ let supportBeam1:THREE.Mesh;
 let sign1:THREE.Mesh;
 let sign2:THREE.Mesh;
 let roof:THREE.Mesh;
+let balloonTextMesh:THREE.Mesh;
+let bulletTextMesh:THREE.Mesh;
 let spikeArray: Array<THREE.Mesh>;
-let spikeCounter:number;
+let balloonArray: Array<THREE.Mesh>;
 
 let world:CANNON.World;
 let sphereBody:CANNON.Body;
 let sphereArray:Array<CANNON.Body>;
 let balloonBody:CANNON.Body;
 let balloonBodyArray: Array<CANNON.Body>;
-let balloonArray: Array<THREE.Mesh>;
 
 let balloonCounter:number;
 let balloonBodyCounter:number;
-
-let sandTexture:THREE.Texture;
-let woodTexture:THREE.Texture;
-let smallBlockTexture:THREE.Texture;
-
-//let bulletsRem:number;
+let spikeCounter:number;
 let balloonsPopped:number;
-let balloonTextMesh:THREE.Mesh;
-let bulletTextMesh:THREE.Mesh;
 let addedBalloon:boolean;
 let addedBullets:boolean;
 
+let sandTexture:THREE.Texture;
+let smallBlockTexture:THREE.Texture;
 
 function main() {
-    // loadShaders()
 	initScene();
 	initStats();
-	//initGUI();
 	initListeners();
 }
 
 function initStats() {
 	stats = new (Stats as any)();
 	document.body.appendChild(stats.dom);
-}
-
-function initGUI() {
-	const gui = new DAT.GUI();
-	gui.add(model, 'groupX', -4, 4, 0.1)
-	gui.add(model, 'groupY', -3, 3, 0.1)
-	gui.add(model, 'groupAngle', -Math.PI, Math.PI, 0.1).listen()
 }
 
 function initScene() {
@@ -127,30 +107,16 @@ function initScene() {
 
 	document.body.appendChild(renderer.domElement);
 
-	//viewOne = new ViewOne(model, renderer);
-	
+	controls = new OrbitControls(camera, renderer.domElement);
 
 	sphereArray=new Array<CANNON.Body>(19);
 	spikeArray=new Array<THREE.Mesh>(19);
 	balloonArray=new Array<THREE.Mesh>(15);
 	balloonBodyArray=new Array<CANNON.Body>(15);
-	
-	world=new CANNON.World({
-		gravity: new CANNON.Vec3(0,0, -1.5), // m/s²
-	  });
-	  world.broadphase = new CANNON.NaiveBroadphase() //next three lines from Cannon-es documentation collision example
-	  ;(world.solver as CANNON.GSSolver).iterations = 5
-	  world.allowSleep = true
-	  
-	// // viewOne = new ViewOne(model, renderer);
-	// // views.push(viewOne);
-
-	// // viewOne.scene.background = new THREE.Color(0xffffff)
-
-	// // viewTwo = new ViewTwo(model, renderer);
-	// // views.push(viewTwo);
-
-	controls = new OrbitControls(camera, renderer.domElement);
+	balloonsPopped=0;
+	spikeCounter=0;
+	addedBalloon=false;
+	addedBullets=false;
 
 	lightPoint = new THREE.PointLight(0xFFFFFF);
 	lightPoint.position.set(0, 3, 10);
@@ -163,9 +129,7 @@ function initScene() {
 	lightPoint.intensity = 1;
 	scene.add(lightPoint);
 
-	raycaster = new THREE.Raycaster();
-	pointerPosition = new THREE.Vector2(0,0);
-
+	//MATERIALS AND GEOMETRY
 	const geometryFloor= new THREE.BoxBufferGeometry(27,4,27,6,6,6);
 	const materialFloor= new THREE.MeshPhongMaterial({color:0xFFFFFF});
 	const geometrySpike = new THREE.ConeBufferGeometry(0.07,0.35,10,4);
@@ -184,8 +148,25 @@ function initScene() {
 	const signTextMat=new THREE.MeshPhongMaterial({color:0x000000});
 	const signMat=new THREE.MeshBasicMaterial({color:0x715F42});
 	const signGeo=new THREE.BoxBufferGeometry(2.5,2,0.2,3,3,3);
-	//const geometryText=new T
 
+	//REG MESH STUFF
+	supportBeam0=new THREE.Mesh(geometrySupport,materialSupport);
+	supportBeam0.position.set(4.5,3.3,-2);
+	scene.add(supportBeam0);
+	supportBeam1=new THREE.Mesh(geometrySupport,materialSupport);
+	supportBeam1.position.set(-4.5,3.3,-2);
+	scene.add(supportBeam1);
+
+	sign1=new THREE.Mesh(signGeo,signMat);
+	sign1.position.set(-5.1,1.7,-1.3);
+	sign1.rotation.y=0.25;
+	scene.add(sign1);
+	sign2=new THREE.Mesh(signGeo,signMat);
+	sign2.position.set(4.9,1.7,-1.3);
+	sign2.rotation.y=-0.25;
+	scene.add(sign2);
+
+	//TEXT STUFF
 	const textLoader=new FontLoader();
 	const fontData=textLoader.parse(westernFontPath);
 
@@ -241,29 +222,6 @@ function initScene() {
 		back.material = textureMaterial;
 
     });
-	supportBeam0=new THREE.Mesh(geometrySupport,materialSupport);
-	supportBeam0.position.set(4.5,3.3,-2);
-	scene.add(supportBeam0);
-	supportBeam1=new THREE.Mesh(geometrySupport,materialSupport);
-	supportBeam1.position.set(-4.5,3.3,-2);
-	scene.add(supportBeam1);
-
-	roof=new THREE.Mesh(geometryRoof,materialSupport);
-	roof.position.set(0,8.5,-4);
-	roof.scale.set(3,2,1);
-	roof.rotation.z=Math.PI/2;
-	roof.rotation.x=-1.25;
-	scene.add(roof);
-
-	sign1=new THREE.Mesh(signGeo,signMat);
-	sign1.position.set(-5.1,1.7,-1.3);
-	sign1.rotation.y=0.25;
-	scene.add(sign1);
-	sign2=new THREE.Mesh(signGeo,signMat);
-	sign2.position.set(4.9,1.7,-1.3);
-	sign2.rotation.y=-0.25;
-	scene.add(sign2);
-	
 	smallBlock0=new THREE.Mesh(geometrySmallBlock,materialSmallBlock);
 	smallBlock0.position.set(0,-2,-2);
 	smallBlock0.scale.set(0.8,0.8,0.8);
@@ -284,6 +242,12 @@ function initScene() {
 	smallBlock4.position.set(-3.9,-2,-2);
 	smallBlock4.scale.set(0.8,0.8,0.8);
 	scene.add(smallBlock4);
+	roof=new THREE.Mesh(geometryRoof,materialSupport);
+	roof.position.set(0,8.5,-4);
+	roof.scale.set(3,2,1);
+	roof.rotation.z=Math.PI/2;
+	roof.rotation.x=-1.25;
+	scene.add(roof);
 	textureLoader.load(smallBlockPath, function (texture) {
 
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
@@ -301,8 +265,8 @@ function initScene() {
 		roof.material=textureMaterial;
     });
 	
+	//GLTF MODEL STUFF
 	const modelLoader = new GLTFLoader();
-	
 	cactus=new THREE.Group;
 	modelLoader.load(cactusPath, (gltf) => {
 		cactus = gltf.scene;
@@ -311,7 +275,6 @@ function initScene() {
 		cactus.castShadow=true;
 		scene.add(cactus);
 	});
-	
 	barrel0=new THREE.Group;
 	modelLoader.load(barrelPath,(gltf)=>{
 		barrel0=gltf.scene;
@@ -328,6 +291,14 @@ function initScene() {
 		scene.add(barrel1);
 	})
 
+	//CANNON STUFF
+	world=new CANNON.World({
+		gravity: new CANNON.Vec3(0,0, -1.5), // m/s²
+	  });
+	  world.broadphase = new CANNON.NaiveBroadphase() //next three lines from Cannon-es documentation collision example
+	  ;(world.solver as CANNON.GSSolver).iterations = 5
+	  world.allowSleep = true
+
 	for(let i=0;i<20;i++){
 		sphereBody = new CANNON.Body({
 			mass: 5, // kg
@@ -335,11 +306,9 @@ function initScene() {
 		});
 		sphereBody.velocity.set(0,0,-2);
 		sphereBody.linearDamping=0;
-		sphereBody.position.set(cactus.position.x, cactus.position.y, 0) // m
-		//world.addBody(sphereBody);
+		sphereBody.position.set(cactus.position.x, cactus.position.y, 0)
 		sphereArray[i]=sphereBody;
 	}
-
 	for(let i=0;i<20;i++){
 		spike=new THREE.Mesh(geometrySpike, materialSpike);
 		spike.position.x=cactus.position.x;
@@ -347,7 +316,6 @@ function initScene() {
 		spike.rotation.x=-1*Math.PI/2;
 		spikeArray[i]=spike;
 	}
-	
 	balloonBodyCounter=0;
 	for(let i=0;i<4;i++){
 		for(let j=0;j<4;j++){
@@ -372,12 +340,7 @@ function initScene() {
 				balloonCounter++;
 			}
 		}
-	balloonsPopped=0;
-	spikeCounter=0;
-	addedBalloon=false;
-	addedBullets=false;
-	// //world.defaultContactMaterial.contactEquationStiffness = 1e6;
-	
+
 	// Init animation
 	animate();
 }
@@ -407,64 +370,15 @@ function initListeners() {
 		scene.add(spikeArray[spikeCounter]);
 		spikeCounter++;
 		addedBullets=false;
-		// viewTwo.scene.background = new THREE.Color(value)
 	})
 
 	window.electronAPI.updateCactusX((event: any, value: any) => {
 		cactus.position.x=4*value;
-		// model.groupAngle = value * -Math.PI;
 	})
 
 	window.addEventListener('resize', onWindowResize, false);
 
 	window.addEventListener('pointermove', onPointerMove);
-
-	// window.addEventListener('keydown', (event) => {
-	// 	const { key } = event;
-	// 	// console.log(key);
-
-	// 	switch (key) {
-	// 		case 'e':
-	// 			const win = window.open('', 'Canvas Image');
-
-	// 			const { domElement } = renderer;
-
-	// 			// Makse sure scene is rendered.
-    //             switch (model.activeView) {
-    //                 case 0:
-    //                     renderer.render(viewOne.scene, viewOne.camera);
-    //                     break;
-            
-    //                 case 1:
-    //                     renderer.render(viewTwo.scene, viewTwo.camera);
-    //                     break;
-            
-    //                 default:
-    //                     break;
-    //             }
-
-	// 			const src = domElement.toDataURL();
-
-	// 			if (!win) return;
-
-	// 			win.document.write(`<img src='${src}' width='${domElement.width}' height='${domElement.height}'>`);
-	// 			break;
-
-	// 		case 'ArrowRight':
-	// 			model.activeView = (model.activeView + 1) % views.length
-	// 			break;
-
-	// 		case 'ArrowLeft':
-	// 			model.activeView = (model.activeView - 1)
-	// 			if (model.activeView < 0) {
-	// 				model.activeView = views.length - 1;
-	// 			}
-	// 			break;
-
-	// 		default:
-	// 			break;
-	// 	}
-	// });
 }
 
 function onWindowResize() {
@@ -481,34 +395,16 @@ function animate() {
 	requestAnimationFrame(() => {
 		animate();
 	});
-	//console.log(sphereBody.position.y);
 	let delta = clock.getDelta();
 	
 	world.fixedStep();
 
 	cactus.position.y=Math.sin(clock.getElapsedTime())*4+2;
-	//viewOne.update(clock,delta);
+
 	for(let i=0;i<spikeCounter;i++){
 		spikeArray[i].position.z=sphereArray[i].position.z;
 	}
-	// // switch (model.activeView) {
-	// // 	case 0:
-	// // 		viewOne.update(clock,delta);
-	// // 		// if(model.groupAngle < 0) {
-	// // 		// 	window.electronAPI.writeLEDStatus(0)
-	// // 		// } else {
-	// // 		// 	window.electronAPI.writeLEDStatus(1)
-	// // 		// }
-	// // 		window.electronAPI.writeLEDBrightness((model.groupAngle + Math.PI) / (Math.PI*2))
-	// // 		break;
-
-	// // 	case 1:
-	// // 		viewTwo.update(clock,delta);
-	// // 		break;
-
-	// // 	default:
-	// // 		break;
-	// // }
+	
 	const textLoader=new FontLoader();
 	const fontData=textLoader.parse(westernFontPath);
 	const fontMat=new THREE.MeshPhongMaterial({color:0xFFFFFF});
@@ -561,9 +457,8 @@ function animate() {
 
 	if (stats) stats.update();
 
-	// if (controls) controls.update();
+	if (controls) controls.update();
 
-	// renderer.render(views[model.activeView].scene, views[model.activeView].camera);
 	renderer.render(scene,camera);
 }
 
@@ -585,8 +480,6 @@ interface ColorMaterial extends THREE.Material {
 export interface IElectronAPI {
 	fireBullet: (callback: (event: any, value: any) => void) => void,
 	updateCactusX: (callback: (event:any, value:any) => void) => void
-	// writeLEDStatus: (onOff:1|0) => any
-	// writeLEDBrightness: (brightness: number) => any
 }
 
 declare global {
