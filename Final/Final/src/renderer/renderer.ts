@@ -8,8 +8,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as DAT from 'dat.gui';
 import * as CANNON from 'cannon-es'
 
-import { baseView } from '../views/baseView';
-import { baseViewExtend } from '../views/baseViewExtend';
+// import { baseView } from '../views/baseView';
+// import { baseViewExtend } from '../views/baseViewExtend';
 //import { viewOne } from '../views/viewOne';
 
 import cactusPath from './assets/models/cactus.gltf';
